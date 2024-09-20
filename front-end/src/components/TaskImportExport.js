@@ -36,14 +36,18 @@ const TaskImportExport = () => {
   
       try {
           const response = await axios.post('http://localhost:3000/api/tasks/import',formData);
-  
-          console.log('Response status:', response.status); // Log status
+        
+          if (!response.ok) {
+            const errorMessage = await response.text(); 
+            throw new Error(`Error: ${errorMessage}`);
+        }
+          console.log('Response status:', response.status); 
           const result = await response.json();
-          console.log('Import result:', result); // Log result
+          console.log('Import result:', result); 
   
-          // Check if the result contains expected data
+          
           if (Array.isArray(result.tasks)) {
-              setTasks(result.tasks); // Set tasks only if it's an array
+              setTasks(result.tasks); 
           } else {
               console.error('Expected an array but got:', result.tasks);
           }

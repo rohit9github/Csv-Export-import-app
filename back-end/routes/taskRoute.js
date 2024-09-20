@@ -69,7 +69,16 @@ router.post('/import', upload.single('file'), importTasks);
 //     }
 // });
 
-router.get('/', getTasks);
+router.get('/', async (req, res) => {
+    console.log('Tasks endpoint hit');
+    try {
+        const tasks = await Task.find(); // Adjust if you have pagination or filters
+        res.json({ tasks }); // Ensure you return an object with tasks
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
 // Filter tasks with advanced criteria
 router.post('/filter', filterTasks);
